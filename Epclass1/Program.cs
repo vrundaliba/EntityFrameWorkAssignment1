@@ -1,106 +1,68 @@
-﻿using EFclass1;
+﻿
 using Domain.Entities;
+using EFclass1;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-var dbcontect = new DataContext();
-
-
-var user1 = new User
+class Program
 {
-    Name = "Vrunda",
-    Email = "vrunda.gohil@example.com",
-    PhoneNumber = "123-456-7890"
-};
+    static void Main(string[] args)
+    {
+        string message = "Hello World!!";
 
-var user2 = new User
-{
-    Name = "Karan",
-    Email = "karan.Gohil@example.com",
-    PhoneNumber = "987-654-3210"
-};
-dbcontect.Users.Add(user1);
-dbcontect.Users.Add(user2);
-dbcontect.SaveChanges();
+        Console.WriteLine(message);
+        TestDatabase();
+    }
 
+    public static void TestDatabase()
+    {
+
+        var context = new DataContext();
+        var repo = new Repo(context);
 
 
-var blogType = new BlogType
-{
-     
-    Name = "cooking",
-    Description = "A blog about cooking"
-};
+        var user1 = new User
+        {
+            Name = "GohilRaj",
+            Email = "gohil@example.com",
+            PhoneNumber = "555-456-7890"
+        };
+        repo.Create<User>(user1);
+        repo.CommitTransacton();
 
-var postType = new PostType
-{   
-    Name = "Tutorial",
-    Description = "A tutorial post"
-};
+        List<User> users = repo.GetAll<User>();
 
-dbcontect.BlogTypes.Add(blogType);
-dbcontect.PostTypes.Add(postType);
-dbcontect.SaveChanges();
-
-var blog = new Blog
-{
-    Url = "http://example.com",
-    IsPublic = true,
-    Name = "vrunda",
-    BlogTypeId = blogType.Id 
-};
-dbcontect.Blogs.Add(blog);
-dbcontect.SaveChanges();
+        Console.WriteLine("User List");
+        foreach (User user in users)
+        {
+            Console.WriteLine($"Id: {user.Id}, Name: {user.Name}, Email: {user.Email}, PhoneNumber: {user.PhoneNumber}");
+        }
 
 
 
-List<User> users;
-List<Blog> blogs;
-List<PostType> postTypes;
-List<Post> posts;
+        user1.Name = "Bapu";
+        repo.Update<User>(user1);
+        repo.CommitTransacton();
+
+        List<User> users1 = repo.GetAll<User>();
+
+        Console.WriteLine("User List");
+        foreach (User user in users1)
+        {
+            Console.WriteLine($"Id: {user.Id}, Name: {user.Name}, Email: {user.Email}, PhoneNumber: {user.PhoneNumber}");
+        }
 
 
-posts = dbcontect.Posts.ToList();
+        repo.Delete<User>(1);
+        repo.CommitTransacton();
+        List<User> users2 = repo.GetAll<User>();
 
-users = dbcontect.Users.ToList();
-var UserId = users.First().Id;
-
-blogs = dbcontect.Blogs.ToList();
-var BlogId = blogs.First().Id;
-
-postTypes = dbcontect.PostTypes.ToList();
-var postTypeId = postTypes.First().Id;
+        Console.WriteLine("User List");
+        foreach (User user in users2)
+        {
+            Console.WriteLine($"Id: {user.Id}, Name: {user.Name}, Email: {user.Email}, PhoneNumber: {user.PhoneNumber}");
+        }
 
 
-var newPost = new Post
-{
-    Title = "New Post Title",
-    content = "This is the content of the new post",
-    UserId = UserId,
-    BlogId = BlogId,
-    PostTypeId = postTypeId
-
-};
-
-dbcontect.Posts.Add(newPost);
-dbcontect.SaveChanges();
-
-Console.WriteLine("User List");
-foreach (User user in users)
-{
-    Console.WriteLine($"Id: {user.Id}, Name: {user.Name}, Email: {user.Email}, PhoneNumber: {user.PhoneNumber}");
+    }
 }
-Console.WriteLine(" ");
-Console.WriteLine("Blog List");
-foreach (Blog blg in blogs)
-{
-    Console.WriteLine($"Id: {blog.Id}, Name: {blg.Name}, Url: {blg.Url}");
-}
-Console.WriteLine(" ");
-Console.WriteLine("Post List");
-foreach (Post post in posts)
-{
-    Console.WriteLine($"Id: {post.Id}, Title: {post.Title}, Content: {post.content}, UserName: {post.Users.Name},, BlogUrl: {post.Blog.Url},, PosTypeName: {post.PostType.Name}");
-}
-Console.WriteLine(" ");
-Console.WriteLine(" ");

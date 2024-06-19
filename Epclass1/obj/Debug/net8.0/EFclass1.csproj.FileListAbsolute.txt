@@ -60,3 +60,4 @@ C:\Users\student-AVD\source\repos\EntityFramework\Epclass1\Epclass1\obj\Debug\ne
 C:\Users\student-AVD\source\repos\EntityFramework\Epclass1\Epclass1\obj\Debug\net8.0\EFclass1.pdb
 C:\Users\student-AVD\source\repos\EntityFramework\Epclass1\Epclass1\obj\Debug\net8.0\EFclass1.genruntimeconfig.cache
 C:\Users\student-AVD\source\repos\EntityFramework\Epclass1\Epclass1\obj\Debug\net8.0\ref\EFclass1.dll
+C:\Users\student-AVD\source\repos\EntityFramework\Epclass1\Epclass1\obj\Debug\net8.0\EFclass1.sourcelink.json
